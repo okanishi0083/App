@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  app:
+    image: my_app
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - type: bind
+        source: ./react-app
+        target: /usr/src/app
+    environment:
+      - NODE_ENV=development
+    working_dir: /usr/src/app/ 
+    # command: sh -c "cd react-app && npm install && npm run dev -- --host"
+    stdin_open: true
