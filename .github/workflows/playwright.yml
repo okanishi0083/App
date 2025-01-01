@@ -26,7 +26,9 @@ jobs:
           ${{ runner.os }}-node-
 
     - name: 依存関係をインストール
-      run: npm ci
+      run: |
+        cd react-app
+        npm ci
 
     - name: Cache Playwright browsers
       uses: actions/cache@v3
@@ -37,7 +39,11 @@ jobs:
           ${{ runner.os }}-playwright-
 
     - name: Playwrightブラウザをインストール
-      run: npx playwright install --with-deps
+      run: |
+        cd react-app
+        npx playwright install --with-deps
 
     - name: Playwrightテストを実行
-      run: npx playwright test --reporter=html
+      run: |
+        cd react-app
+        npx playwright test --reporter=html
