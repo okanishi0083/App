@@ -19,13 +19,19 @@ jobs:
         node-version: lts/*
 
     - name: 依存関係をインストール
-      run: npm ci
+      run: |
+        cd react-app
+        npm ci
 
     - name: Playwrightブラウザをインストール
-      run: npx playwright install --with-deps
+      run: |
+        cd react-app
+        npx playwright install --with-deps
 
     - name: Playwrightテストを実行
-      run: npx playwright test --reporter=html --video=on
+      run: |
+        cd react-app
+        npx playwright test --reporter=html --video=on
 
     - name: Playwrightレポートをアップロード
       if: ${{ always() }}
