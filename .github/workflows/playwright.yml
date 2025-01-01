@@ -31,7 +31,7 @@ jobs:
     - name: Playwrightテストを実行
       run: |
         cd react-app
-        npx playwright test --reporter=html --video=on
+        npx playwright test --reporter=html
 
     - name: Playwrightレポートをアップロード
       if: ${{ always() }}
