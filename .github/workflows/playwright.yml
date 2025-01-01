@@ -6,7 +6,6 @@ on:
 
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
 
     steps:
@@ -18,10 +17,26 @@ jobs:
       with:
         node-version: lts/*
 
+    - name: Cache Node.js modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
     - name: 依存関係をインストール
       run: |
         cd react-app
         npm ci
+
+    - name: Cache Playwright browsers
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-
 
     - name: Playwrightブラウザをインストール
       run: |
@@ -31,12 +46,4 @@ jobs:
     - name: Playwrightテストを実行
       run: |
         cd react-app
-        npx playwright test --reporter=html --video=on
-
-    - name: Playwrightレポートをアップロード
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 1
+        npx playwright test --reporter=html
